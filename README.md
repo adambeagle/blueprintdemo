@@ -2,6 +2,6 @@ This repo contains two demonstration Flask applications for use with this presen
 
 The applications are equivalent in terms of end user experience, but are structured differently. The `blueprint` application is a refactored version of `monolith`, making use of blueprints and the application factory pattern.
 
-Both applications have the same requirements, so one virtual environment may be used for both. Both also use the default flask_sqlalchemy database &mdash; a temporary sqllite file.
+Both applications have the same requirements, so one virtual environment may be used for both. Both also use the default flask_sqlalchemy database &mdash; an in-memory SQLLite DB (note this means the DB will be empty when starting/re-starting the application).
 
 To run either application use `flask run` inside the application root directory (`monolith` or `blueprint`).
