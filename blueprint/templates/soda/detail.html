@@ -1,0 +1,37 @@
+{% extends '_skeleton.html' %}
+{% set _TITLE = soda.name %}
+
+{% block content %}
+<div class="vindicate-form auto-submit auto-reload" data-submit-url="{{url_for('api.soda.update')}}">
+    <header class="d-flex align-items-end border-bottom pb-2 mb-3">
+        <div>
+            <h2 class="mb-1">Soda Detail</h2>
+            <a href="{{url_for('soda.index')}}"><small>Back to all</small></a>
+        </div>
+        <div class="ml-auto">
+            <button class="btn btn-outline-danger postme mr-2" data-url="{{url_for('api.soda.delete')}}" data-confirm-message="Are you sure?" data-soda-id="{{soda.soda_id}}">
+                <i class="far fa-trash-alt"></i>&ensp;Delete
+            </button>
+            <button class="btn btn-primary vindicate-form-submit"><i class="far fa-save"></i>&ensp;Save</button>
+        </div>
+    </header>
+    <div class="row">
+        <input type="hidden" name="soda_id" value="{{soda.soda_id}}" hidden>
+        <div class="col-6 form-group">
+            <label for="">Name</label>
+            <input type="text" class="form-control" name="name" value="{{soda.name}}" data-vindicate="required">
+            <small class="invalid-feedback"></small>
+        </div>
+        <div class="col-6 form-group">
+            <label for="">Type</label>
+            <select name="type" id="" class="form-control" data-vindicate="required">
+                <option value="">-- Select --</option>
+                {% for type_code, type_label in models.Soda.TYPES.items() %}
+                <option value="{{type_code}}" {{'selected' if soda.type == type_code}}>{{type_label}}</option>
+                {% endfor %}
+            </select>
+            <small class="invalid-feedback"></small>
+        </div>
+    </div>
+</div>
+{% endblock %}

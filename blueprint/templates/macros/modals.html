@@ -1,0 +1,36 @@
+{% macro modal(title, modal_type, size='', modal_cls='', content_cls='', action='', header_icon=None, content_id=None, content_data=None, header_style=None, title_cls=None, static=False, can_close=True) %}
+    {% set content_data = content_data or {} %}
+<div id="{{modal_type}}-modal" class="modal fade {{modal_cls or ''}}" tabindex="-1" role="dialog" aria-labelledby="{{modal_type}}-modal-label" aria-hidden="true" {% if static %}data-backdrop="static"{% endif %}>
+    <div class="modal-dialog modal-dialog-scrollable{{(' modal-' + size) if size}}" role="document">
+        <div {% if content_id %}id="{{content_id}}"{% endif %} class="modal-content {{content_cls or ''}}"{% for key, val in content_data.items() %} data-{{key}}="{{val}}"{% endfor %}>
+            <div class="modal-header {{header_style or ''}}">
+                {% if title %}
+                <h3 id="{{modal_type}}-modal-label" class="modal-title {{title_cls or ''}}">{% if header_icon %}<i class="fai {{header_icon}}"></i>&ensp;{% endif %}<span class="action">{{action or ''}}</span> {{title|safe}}</h3>
+                {% else %}
+                <div></div>
+                {% endif %}
+                {% if can_close %}
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="fai fas fa-times"></i></span>
+                </button>
+                {% endif %}
+            </div>
+            {{caller()}}
+        </div>
+    </div>
+</div>
+{% endmacro %}
+
+
+{% macro form_modal(modal_type, title, form_cls, submit_url='', submit_text='Submit', submit_icon=None, size='md', auto_submit=False, auto_reload=False, submit_style='primary', has_upload=False, multiple_upload=False, upload_context=None, upload_path_generator_url=None) %}
+    {% set outercaller = caller %}
+    {% call modal(title, modal_type, size, modal_cls='form-modal', content_cls='vindicate-form' + (' auto-submit' if auto_submit else '') + (' auto-reload' if auto_reload else '') + (' has-upload' if has_upload else '') + (' upload-multiple' if multiple_upload else ''), content_id=modal_type + '-form', content_data={'form-class': form_cls, 'submit-url': submit_url, 'path-generator-url': upload_path_generator_url}) %}
+    <div class="modal-body">
+        {{outercaller()}}
+    </div>
+    <div class="modal-footer d-flex justify-content-between align-items-start">
+        <small class="form-modal-error text-danger"></small>
+        <button type="button" class="btn btn-{{submit_style}} form-modal-submit vindicate-form-submit" id="{{modal_type}}-modal-submit">{% if submit_icon %}<i class="fai {{submit_icon}}"></i>&ensp;{% endif %}{{submit_text}}</button>
+    </div>
+    {% endcall %}
+{% endmacro %}

@@ -1,0 +1,20 @@
+{% from 'macros/modals.html' import form_modal %}
+
+{% call form_modal('soda-crupdate', 'Soda', '', auto_reload=True, auto_submit=True) %}
+<input type="hidden" name="soda_id" hidden>
+<div class="form-group">
+    <label for="">Name</label>
+    <input type="text" class="form-control" name="name" data-vindicate="required">
+    <small class="invalid-feedback"></small>
+</div>
+<div class="form-group">
+    <label for="">Type</label>
+    <select name="type" id="" class="form-control" data-vindicate="required">
+        <option value="">-- Select --</option>
+        {% for type_code, type_label in models.Soda.TYPES.items() %}
+        <option value="{{type_code}}">{{type_label}}</option>
+        {% endfor %}
+    </select>
+    <small class="invalid-feedback"></small>
+</div>
+{% endcall %}

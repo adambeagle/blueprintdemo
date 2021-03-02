@@ -1,0 +1,10 @@
+*.pyc
+.idea
+.vscode
+venv/
+config/local*.cfg
+__pycache__/
+*.DS_Store
+node_modules/
+job_*.txt
+.pytest_cache/

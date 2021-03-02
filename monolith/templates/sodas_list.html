@@ -1,0 +1,74 @@
+{% extends '_skeleton.html' %}
+{% set _TITLE = 'Sodas' %}
+
+{% block modals %}
+{% include 'modals/soda_crupdate.html' %}
+{% endblock %}
+
+
+{% block content %}
+<header class="d-flex align-items-center mb-3">
+    <h2>Sodas</h2>
+    <button class="btn btn-primary ml-auto add-soda"><i class="far fa-plus"></i>&ensp;Add Soda</button>
+</header>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for soda in sodas %}
+        <tr>
+            <td>
+                <a href="{{url_for('soda_detail', soda_id=soda.soda_id)}}">{{soda.name}}</a>
+            </td>
+            <td>{{models.Soda.TYPES.get(soda.type, '--')}}</td>
+            <td class="text-right">
+                <button class="btn btn-sm btn-outline-secondary edit-soda" data-soda-id="{{soda.soda_id}}">
+                    <i class="far fa-edit"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger postme auto-reload" data-url="{{url_for('api_soda_delete')}}" data-confirm-message="Are you sure?" data-soda-id="{{soda.soda_id}}">
+                    <i class="far fa-trash-alt"></i>
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    $('.add-soda').click(function() {
+        const $btn = $(this);
+        const $modal = $('#soda-crupdate-modal');
+        tfcjs.forms.clearForm($modal);
+        $('.action', $modal).text('Add');
+        $('.vindicate-form', $modal).data('submit-url', "{{url_for('api_soda_create')}}");
+        $modal.modal('show');
+    });
+
+    $('.edit-soda').click(function() {
+        const $btn = $(this);
+        const $modal = $('#soda-crupdate-modal');
+        tfcjs.forms.clearForm($modal);
+        $('.action', $modal).text('Edit');
+        $('.vindicate-form', $modal).data('submit-url', "{{url_for('api_soda_update')}}");
+
+        tfcPost(
+            "{{url_for('api_soda_get')}}",
+            {soda_id: $btn.data('soda-id')},
+            function(response) {
+                tfcjs.forms.populateForm($modal, response.result);
+                $modal.modal('show');
+            },
+            {
+                triggerBtn: $btn,
+            }
+        );
+    });
+</script>
+{% endblock %}
