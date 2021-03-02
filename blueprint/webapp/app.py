@@ -23,7 +23,7 @@ def create_app():
     app.register_blueprint(views.soda.bp, url_prefix='/pops')
 
     # API blueprints are registered the same way as view blueprints
-    # By convention they should always start with `/api/<endpoint>` where 
+    # By convention they should always start with `/api/<endpoint>` where <endpoint> matches the module name
     app.register_blueprint(api.soda.bp, url_prefix='/api/soda')
 
     app.before_request(before_request)
